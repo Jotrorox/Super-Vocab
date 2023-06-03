@@ -74,6 +74,49 @@ class SimpleCard {
     //}
 }
 
+async function getVocabCardIDs() : Promise<string[]> {
+    var filter = {
+        filter_group: {
+            operator: 'and',
+            filters: [
+                {
+                    type: 'tag',
+                    operator: 'contains',
+                    arg: "super-vocaber-card",
+                },
+            ],
+        },
+    }
+
+    var response = await fetch(`${baseUrl}/cards/get/select`, {
+        headers: {
+            'Api-Key': key.key,
+            'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify(filter),
+    });
+    return Object.keys(await response.json());
+}
+
+async function setCardDue(cardID: string) {
+    // TODO: Set card due
+}
+
+function checkCardDue(cardID: string) : boolean {
+    return false;
+}
+
+async function checkForReviews() {
+    var vocabCardIDs = await getVocabCardIDs().then((data) => {
+        data.forEach(async element => {
+            if (checkCardDue(element)) {
+                await setCardDue(element);
+            }
+        });
+    });
+}
+
 var key = new Key();
 
 var card = new SimpleCard(
@@ -83,4 +126,6 @@ var card = new SimpleCard(
 
 card.addTag('api-test');
 
-card.send(key);
+// card.send(key);
+
+await checkForReviews();
