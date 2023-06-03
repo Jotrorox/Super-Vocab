@@ -1,9 +1,9 @@
 {
     "name": "supervocab",
-    "module": "index.ts",
+    "module": "src/index.ts",
     "type": "module",
     "scripts": {
-        "run": "bun run index.ts"
+        "run": "bun run src/index.ts"
     },
     "devDependencies": {
         "bun-types": "^0.6.0"
