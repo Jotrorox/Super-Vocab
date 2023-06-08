@@ -100,17 +100,47 @@ async function getVocabCardIDs() : Promise<string[]> {
 }
 
 async function setCardDue(cardID: string) {
-    // TODO: Set card due
+    console.log(`Set Due: ${cardID}`);
 }
 
-function checkCardDue(cardID: string) : boolean {
-    return false;
+async function checkCardDue(cardID: string) : Promise<boolean> {
+    var filter = {
+        filter_group: { 
+            operator: 'and',
+        },
+        modified_when: {
+            from_when: new Date('2021-01-01T00:00:00.000Z'),
+            to_when: new Date('2023-06-09T00:00:00.000Z'),
+        },
+    }
+
+    var response = await fetch(`${baseUrl}/cards/get/select`, {
+        headers: {
+            'Api-Key': key.key,
+            'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify(filter),
+    });
+    if (response.ok) {
+        var cardIDs = Object.keys(await response.json());
+        console.log(cardIDs);
+        if (cardIDs.includes(cardID) ) {
+            return true;
+        } else {
+            return false;
+        }
+    } else {
+        console.log(`Error at request: ${response.status}`);
+        console.log("Body: " + await response.json());
+        return false;
+    }
 }
 
 async function checkForReviews() {
     var vocabCardIDs = await getVocabCardIDs().then((data) => {
         data.forEach(async element => {
-            if (checkCardDue(element)) {
+            if (await checkCardDue(element)) {
                 await setCardDue(element);
             }
         });
