@@ -1,5 +1,4 @@
-# Since there were to many issues with typescript 
-# I redid the project in rust in a new repo: 
+# Since there were to many issues with typescript, I redid the project in rust in a new repo: 
 # [https://github.com/Jotrorox/supervocab](https://github.com/Jotrorox/supervocab)
 
 # Super Vocab
